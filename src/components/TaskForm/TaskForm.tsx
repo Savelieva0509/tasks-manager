@@ -25,6 +25,7 @@ const TaskForm = () => {
       validated={validated}
       onSubmit={handleSubmit}
       ref={formRef}
+      className="mb-4"
     >
       <Form.Group controlId="formTaskTitle" className="mb-3">
         <Form.Control

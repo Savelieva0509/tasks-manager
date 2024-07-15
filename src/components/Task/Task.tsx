@@ -32,7 +32,7 @@ const Task = ({ task }: TaskProps) => {
             id: task.id,
             title: editedTitle,
             text: editedText,
-            file: editedFile,
+            file: editedFile.url,
           })
         );
         setIsEditing(false);
@@ -57,6 +57,14 @@ const Task = ({ task }: TaskProps) => {
       setEditedTitle(event.target.value);
     } else if (event.target.name === 'text') {
       setEditedText(event.target.value);
+    } else if (event.target.name === 'file') {
+      const file = event.target.files?.[0];
+      if (file) {
+        setEditedFile({
+          name: file.name,
+          url: URL.createObjectURL(file),
+        });
+      }
     }
   };
 
@@ -92,6 +100,33 @@ const Task = ({ task }: TaskProps) => {
                 className={css.textarea}
               />
             </Form.Group>
+            {originalFile && (
+              <div>
+                <a
+                  className={classNames(
+                    'link-offset-2',
+                    'link-underline',
+                    'link-underline-opacity-0',
+                    'fs-4',
+                    css.linkFile
+                  )}
+                  href={originalFile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <BsFileEarmarkArrowDown size={30} className="me-1" />
+                  <span>{originalFile.name}</span>
+                </a>
+                <Form.Group controlId="formTaskFile" className="mt-2">
+                  <Form.Label>Replace file</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="file"
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </div>
+            )}
           </Form>
         ) : (
           <>
@@ -106,20 +141,24 @@ const Task = ({ task }: TaskProps) => {
                   'fs-4',
                   css.linkFile
                 )}
-                href={task.file}
+                href={task.file.url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <BsFileEarmarkArrowDown size={30} className="me-1" />
-                <span>File</span>
+                <span>{editedFile.name}</span>
               </a>
             )}
           </>
         )}
         {isEditing ? (
           <div className={css.buttonWrapper}>
-            <Button variant="success" onClick={handleEdit}>Save</Button>
-            <Button variant="danger" onClick={handleCancel}>Cancel</Button>
+            <Button variant="success" onClick={handleEdit}>
+              Save
+            </Button>
+            <Button variant="danger" onClick={handleCancel}>
+              Cancel
+            </Button>
           </div>
         ) : (
           <div className={css.buttonWrapper}>
@@ -133,18 +172,6 @@ const Task = ({ task }: TaskProps) => {
         )}
       </Card.Body>
     </Card>
-
-    // <div className={css.wrapper}>
-    //   <input
-    //     type="checkbox"
-    //     className={css.checkbox}
-    //     checked={task.completed}
-    //   />
-    //   <p className={css.text}>{task.text}</p>
-    //   <button className={css.btn}>
-    //     <MdClose size={24} />
-    //   </button>
-    // </div>
   );
 };
 

@@ -5,7 +5,10 @@ export interface TaskTypes {
   text: string;
   completed: boolean;
   deleted: boolean;
-  file: string;
+  file: {
+    name: string;
+    url: string;
+  };
 }
 
 // Тип для состояния задач

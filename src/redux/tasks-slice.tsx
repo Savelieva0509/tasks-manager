@@ -9,7 +9,10 @@ const initialState: TasksState = {
       text: 'Сreate a project structure in accordance with company standards and requirements ',
       completed: true,
       deleted: false,
-      file: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+      file: {
+        url: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+        name: 'Test task',
+      },
     },
     {
       id: '222',
@@ -17,7 +20,10 @@ const initialState: TasksState = {
       text: 'Implement authentication system using JWT for secure access to the application',
       completed: false,
       deleted: false,
-      file: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+      file: {
+        url: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+        name: 'Test task',
+      },
     },
     {
       id: '333',
@@ -25,7 +31,10 @@ const initialState: TasksState = {
       text: 'Integrate backend APIs with frontend components to enable data exchange between them',
       completed: true,
       deleted: false,
-      file: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+      file: {
+        url: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+        name: 'Test task',
+      },
     },
 
     {
@@ -34,7 +43,10 @@ const initialState: TasksState = {
       text: 'Deploy the application to production server using Docker and Kubernetes for scalability',
       completed: false,
       deleted: false,
-      file: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+      file: {
+        url: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+        name: 'Test task',
+      },
     },
   ],
   deletedTasks: [
@@ -44,7 +56,10 @@ const initialState: TasksState = {
       text: 'Design user-friendly interface with modern design principles and responsive layout',
       completed: true,
       deleted: true,
-      file: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+      file: {
+        url: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+        name: 'Test task',
+      },
     },
     {
       id: '666',
@@ -52,7 +67,10 @@ const initialState: TasksState = {
       text: 'Write comprehensive unit tests to ensure the reliability and stability of the application',
       completed: true,
       deleted: true,
-      file: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+      file: {
+        url: 'https://docs.google.com/document/d/19xL_ALYDZshz7cA2lQcOi3xD3x-nYDGVLnqv_GweNko/edit#heading=h.59bwmdjjr3v7',
+        name: 'Test task',
+      },
     },
   ],
 };
@@ -65,7 +83,7 @@ const tasksSlice = createSlice({
       reducer: (state, action: PayloadAction<TaskTypes>) => {
         state.tasks.push(action.payload);
       },
-      prepare: (text: string, title: string, file: string) => {
+      prepare: (text: string, title: string, file: { url: string, name: string }) => {
         return {
           payload: {
             id: nanoid(),
@@ -92,7 +110,7 @@ const tasksSlice = createSlice({
       if (task) {
         task.title = title;
         task.text = text;
-        task.file = file;
+        task.file.url = file;
       }
     },
     deleteTask(state, action) {

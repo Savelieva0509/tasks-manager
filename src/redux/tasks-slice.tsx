@@ -92,7 +92,7 @@ const tasksSlice = createSlice({
       if (task) {
         task.title = title;
         task.text = text;
-        task.file = text;
+        task.file = file;
       }
     },
     deleteTask(state, action) {

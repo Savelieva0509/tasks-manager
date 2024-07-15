@@ -1,8 +1,8 @@
 {
-  "name": "task-manager",
+  "name": "tasks-manager",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Savelieva0509.github.io/task-manager/",
+  "homepage": "https://Savelieva0509.github.io/tasks-manager/",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "@types/node": "^20",

@@ -69,7 +69,7 @@ const Task = ({ task }: TaskProps) => {
   };
 
   return (
-    <Card style={{ width: '100%' }}>
+    <Card className={classNames("bg-body-tertiary", css.taskCard, { [css.editing]: isEditing })}>
       <Card.Body>
         <Form.Check
           type="checkbox"
@@ -80,7 +80,7 @@ const Task = ({ task }: TaskProps) => {
         />
         {isEditing ? (
           <Form>
-            <Form.Group controlId="formTaskTitle">
+            <Form.Group controlId="formTaskTitle" className="mb-3">
               <Form.Control
                 type="text"
                 name="title"
@@ -89,7 +89,7 @@ const Task = ({ task }: TaskProps) => {
                 placeholder="Enter task title"
               />
             </Form.Group>
-            <Form.Group controlId="formTaskText">
+            <Form.Group controlId="formTaskText" className="mb-3">
               <Form.Control
                 as="textarea"
                 rows={3}
@@ -107,7 +107,7 @@ const Task = ({ task }: TaskProps) => {
                     'link-offset-2',
                     'link-underline',
                     'link-underline-opacity-0',
-                    'fs-4',
+                    'fs-5',
                     css.linkFile
                   )}
                   href={originalFile.url}
@@ -117,7 +117,7 @@ const Task = ({ task }: TaskProps) => {
                   <BsFileEarmarkArrowDown size={30} className="me-1" />
                   <span>{originalFile.name}</span>
                 </a>
-                <Form.Group controlId="formTaskFile" className="mt-2">
+                <Form.Group controlId="formTaskFile" className="mt-2 mb-3">
                   <Form.Label>Replace file</Form.Label>
                   <Form.Control
                     type="file"
@@ -138,7 +138,7 @@ const Task = ({ task }: TaskProps) => {
                   'link-offset-2',
                   'link-underline',
                   'link-underline-opacity-0',
-                  'fs-4',
+                  'fs-5',
                   css.linkFile
                 )}
                 href={task.file.url}

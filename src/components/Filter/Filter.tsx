@@ -1,6 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Badge } from 'react-bootstrap';
-import { getFilter, getFilteredTasks } from '../../redux/selectors';
+import {
+  getFilter,
+  getActiveTasks,
+  getTasks,
+  getCompletedTasks,
+} from '../../redux/selectors';
 import { setFilter } from '../../redux/filter-slice';
 import css from './Filter.module.scss';
 import { statusFilters } from '../../redux/constants';
@@ -8,23 +13,12 @@ import { statusFilters } from '../../redux/constants';
 const Filter = () => {
   const dispatch = useDispatch();
   const filter = useSelector(getFilter);
-  const tasks = useSelector(getFilteredTasks);
+  const allTasks = useSelector(getTasks);
+  const activeTasks = useSelector(getActiveTasks);
+  const completedTasks = useSelector(getCompletedTasks);
 
   const handleFilterChange = (newFilter: string) => {
     dispatch(setFilter(newFilter));
-  };
-
-  const countTasks = (filterStatus: string) => {
-    switch (filterStatus) {
-      case statusFilters.all:
-        return tasks.length;
-      case statusFilters.active:
-        return tasks.filter(task => !task.completed).length;
-      case statusFilters.completed:
-        return tasks.filter(task => task.completed).length;
-      default:
-        return 0;
-    }
   };
 
   return (
@@ -37,7 +31,7 @@ const Filter = () => {
       >
         All
         <Badge bg="light" text="dark" className="ms-2 fs-6">
-          {countTasks(statusFilters.all)}
+          {allTasks.length}
         </Badge>
       </Button>
       <Button
@@ -48,7 +42,7 @@ const Filter = () => {
       >
         Active
         <Badge bg="light" text="dark" className="ms-2 fs-6">
-          {countTasks(statusFilters.active)}
+          {activeTasks.length}
         </Badge>
       </Button>
       <Button
@@ -59,7 +53,7 @@ const Filter = () => {
       >
         Completed
         <Badge bg="light" text="dark" className="ms-2 fs-6">
-          {countTasks(statusFilters.completed)}
+          {completedTasks.length}
         </Badge>
       </Button>
     </div>

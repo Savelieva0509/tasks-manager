@@ -6,6 +6,12 @@ export const getDeletedTasks = (state: RootState) => state.tasks.deletedTasks;
 
 export const getFilter = (state: RootState) => state.filter.status;
 
+export const getActiveTasks = (state: RootState) =>
+  state.tasks.tasks.filter(task => !task.completed);
+
+export const getCompletedTasks = (state: RootState) =>
+  state.tasks.tasks.filter(task => task.completed);
+
 export const getFilteredTasks = (state: RootState) => {
   const { tasks, filter } = state;
   switch (filter.status) {

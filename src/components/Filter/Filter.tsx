@@ -1,16 +1,30 @@
-import { Button } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { statusFilters } from '../../redux/constants';
-import { getFilter } from '.././../redux/selectors';
+import { useSelector, useDispatch  } from 'react-redux';
+import { Button, Badge } from 'react-bootstrap';
+import { getFilter, getFilteredTasks } from '../../redux/selectors';
 import { setFilter } from '../../redux/filter-slice';
 import css from './Filter.module.scss';
+import { statusFilters } from '../../redux/constants';
 
 const Filter = () => {
   const dispatch = useDispatch();
   const filter = useSelector(getFilter);
+  const tasks = useSelector(getFilteredTasks);
 
   const handleFilterChange = (newFilter: string) => {
     dispatch(setFilter(newFilter));
+  };
+
+  const countTasks = (filterStatus: string) => {
+    switch (filterStatus) {
+      case statusFilters.all:
+        return tasks.length;
+      case statusFilters.active:
+        return tasks.filter(task => !task.completed).length;
+      case statusFilters.completed:
+        return tasks.filter(task => task.completed).length;
+      default:
+        return 0;
+    }
   };
 
   return (
@@ -21,7 +35,7 @@ const Filter = () => {
         onClick={() => handleFilterChange(statusFilters.all)}
         active={filter === statusFilters.all}
       >
-        All
+        All <Badge bg="secondary">{countTasks(statusFilters.all)}</Badge>
       </Button>
       <Button
         variant="primary"
@@ -29,7 +43,7 @@ const Filter = () => {
         onClick={() => handleFilterChange(statusFilters.active)}
         active={filter === statusFilters.active}
       >
-        Active
+        Active <Badge bg="secondary">{countTasks(statusFilters.active)}</Badge>
       </Button>
       <Button
         variant="primary"
@@ -38,6 +52,7 @@ const Filter = () => {
         active={filter === statusFilters.completed}
       >
         Completed
+        <Badge bg="secondary">{countTasks(statusFilters.completed)}</Badge>
       </Button>
     </div>
   );

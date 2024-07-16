@@ -114,7 +114,7 @@ const tasksSlice = createSlice({
       if (task) {
         task.title = title;
         task.text = text;
-       task.file = { ...task.file, ...file };
+        task.file = { ...task.file, ...file };
       }
     },
     deleteTask(state, action) {

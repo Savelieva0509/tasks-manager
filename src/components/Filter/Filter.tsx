@@ -1,4 +1,4 @@
-import { useSelector, useDispatch  } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Badge } from 'react-bootstrap';
 import { getFilter, getFilteredTasks } from '../../redux/selectors';
 import { setFilter } from '../../redux/filter-slice';
@@ -35,7 +35,7 @@ const Filter = () => {
         onClick={() => handleFilterChange(statusFilters.all)}
         active={filter === statusFilters.all}
       >
-        All{' '}
+        All
         <Badge bg="light" text="dark" className="ms-2 fs-6">
           {countTasks(statusFilters.all)}
         </Badge>
@@ -46,7 +46,7 @@ const Filter = () => {
         onClick={() => handleFilterChange(statusFilters.active)}
         active={filter === statusFilters.active}
       >
-        Active{' '}
+        Active
         <Badge bg="light" text="dark" className="ms-2 fs-6">
           {countTasks(statusFilters.active)}
         </Badge>

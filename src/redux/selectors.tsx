@@ -10,7 +10,7 @@ export const getFilteredTasks = (state: RootState) => {
   const { tasks, filter } = state;
   switch (filter.status) {
     case 'all':
-      return tasks.tasks; 
+      return tasks.tasks;
     case 'active':
       return tasks.tasks.filter(task => !task.completed);
     case 'completed':
@@ -19,5 +19,3 @@ export const getFilteredTasks = (state: RootState) => {
       return tasks.tasks;
   }
 };
-
-

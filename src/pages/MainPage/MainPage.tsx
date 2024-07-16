@@ -11,7 +11,6 @@ const MainPage = () => {
         <Modal />
         <Filter />
       </div>
-
       <TaskList />
     </Layout>
   );

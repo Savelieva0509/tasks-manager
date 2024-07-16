@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import TaskForm from '../TaskForm/TaskForm';
-import css from './Modal.module.scss';
 
 function AddTaskModal() {
   const [show, setShow] = useState(false);
@@ -11,7 +10,11 @@ function AddTaskModal() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button
+        variant="primary"
+        onClick={handleShow}
+        style={{ marginBottom: '24px' }}
+      >
         + ADD NEW TASK
       </Button>
       <Modal
@@ -19,9 +22,13 @@ function AddTaskModal() {
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
-        className={css.modal}
       >
-        <TaskForm />
+        <Modal.Header closeButton className="bg-body-tertiary">
+          <Modal.Title>TASK INFO</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <TaskForm />
+        </Modal.Body>
       </Modal>
     </>
   );

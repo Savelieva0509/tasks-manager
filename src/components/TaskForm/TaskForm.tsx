@@ -47,6 +47,7 @@ const TaskForm = () => {
 
       <Form.Group controlId="formTaskDescription" className="mb-3">
         <Form.Control
+          as= "textarea"
           required
           type="text"
           placeholder="Enter task description..."

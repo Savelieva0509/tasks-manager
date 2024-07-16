@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
+import ArchiveList from '../../components/ArchiveList/ArchiveList';
+import Layout from '../../components/Layout/Layout';
 
 const ArchivePage = () => {
   return (
-    <>
-      <h1>Archive</h1>
-      <Link to="/">Go to Main Page</Link>;
-    </>
+    <Layout>
+      <ArchiveList />
+    </Layout>
   );
 };
 

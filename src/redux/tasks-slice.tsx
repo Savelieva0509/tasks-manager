@@ -83,7 +83,11 @@ const tasksSlice = createSlice({
       reducer: (state, action: PayloadAction<TaskTypes>) => {
         state.tasks.unshift(action.payload);
       },
-      prepare: (text: string, title: string, file: { url: string, name: string }) => {
+      prepare: (
+        text: string,
+        title: string,
+        file: { url: string; name: string }
+      ) => {
         return {
           payload: {
             id: nanoid(),
@@ -91,7 +95,7 @@ const tasksSlice = createSlice({
             text,
             completed: false,
             deleted: false,
-            file:file,
+            file: file,
           },
         };
       },
@@ -124,6 +128,20 @@ const tasksSlice = createSlice({
         state.deletedTasks.push(deletedTask);
       }
     },
+    restoreTask: (state, action: PayloadAction<string>) => {
+      const index = state.deletedTasks.findIndex(
+        task => task.id === action.payload
+      );
+      if (index !== -1) {
+        const [restoredTask] = state.deletedTasks.splice(index, 1);
+        state.tasks.push(restoredTask);
+      }
+    },
+    removeTaskPermanently: (state, action: PayloadAction<string>) => {
+      state.deletedTasks = state.deletedTasks.filter(
+        task => task.id !== action.payload
+      );
+    },
     toggleCompleted: (state, action) => {
       const idToToggle = action.payload;
       const task = state.tasks.find(task => task.id === idToToggle);
@@ -134,6 +152,12 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { addTask, deleteTask, toggleCompleted, editTask } =
-  tasksSlice.actions;
+export const {
+  addTask,
+  deleteTask,
+  toggleCompleted,
+  editTask,
+  restoreTask,
+  removeTaskPermanently,
+} = tasksSlice.actions;
 export const tasksReducer = tasksSlice.reducer;

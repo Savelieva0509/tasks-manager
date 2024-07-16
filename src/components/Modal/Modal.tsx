@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import TaskForm from '../TaskForm/TaskForm';
-import {TaskFormValues} from '../../types';
 
 function AddTaskModal() {
   const [show, setShow] = useState(false);

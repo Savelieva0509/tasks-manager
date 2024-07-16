@@ -21,3 +21,13 @@ export interface TasksState {
 export interface RootState {
   tasks: TasksState;
 }
+
+// Определение типа значений формы задачи
+export interface TaskFormValues {
+  title: string;
+  text: string;
+  file: {
+    name: string;
+    url: string;
+  };
+}

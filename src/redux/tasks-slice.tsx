@@ -106,7 +106,7 @@ const tasksSlice = createSlice({
         id: string;
         title: string;
         text: string;
-        file: string;
+        file: { name: string; url: string };
       }>
     ) {
       const { id, title, text, file } = action.payload;
@@ -114,7 +114,7 @@ const tasksSlice = createSlice({
       if (task) {
         task.title = title;
         task.text = text;
-        task.file.url = file;
+       task.file = { ...task.file, ...file };
       }
     },
     deleteTask(state, action) {

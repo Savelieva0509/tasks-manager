@@ -81,7 +81,7 @@ const tasksSlice = createSlice({
   reducers: {
     addTask: {
       reducer: (state, action: PayloadAction<TaskTypes>) => {
-        state.tasks.push(action.payload);
+        state.tasks.unshift(action.payload);
       },
       prepare: (text: string, title: string, file: { url: string, name: string }) => {
         return {
@@ -91,7 +91,7 @@ const tasksSlice = createSlice({
             text,
             completed: false,
             deleted: false,
-            file,
+            file:file,
           },
         };
       },

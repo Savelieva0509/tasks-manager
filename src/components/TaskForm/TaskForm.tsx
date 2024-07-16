@@ -47,6 +47,13 @@ const TaskForm = forwardRef(
       }
     };
 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        setTaskFile(file);
+      }
+    };
+
     return (
       <Form
         noValidate
@@ -96,6 +103,7 @@ const TaskForm = forwardRef(
           <Form.Control
             required
             type="file"
+            onChange={handleFileChange}
             isInvalid={
               validated &&
               !(

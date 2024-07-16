@@ -35,24 +35,32 @@ const Filter = () => {
         onClick={() => handleFilterChange(statusFilters.all)}
         active={filter === statusFilters.all}
       >
-        All <Badge bg="secondary">{countTasks(statusFilters.all)}</Badge>
+        All{' '}
+        <Badge bg="light" text="dark" className="ms-2 fs-6">
+          {countTasks(statusFilters.all)}
+        </Badge>
       </Button>
       <Button
-        variant="primary"
+        variant="danger"
         type="button"
         onClick={() => handleFilterChange(statusFilters.active)}
         active={filter === statusFilters.active}
       >
-        Active <Badge bg="secondary">{countTasks(statusFilters.active)}</Badge>
+        Active{' '}
+        <Badge bg="light" text="dark" className="ms-2 fs-6">
+          {countTasks(statusFilters.active)}
+        </Badge>
       </Button>
       <Button
-        variant="primary"
+        variant="success"
         type="button"
         onClick={() => handleFilterChange(statusFilters.completed)}
         active={filter === statusFilters.completed}
       >
         Completed
-        <Badge bg="secondary">{countTasks(statusFilters.completed)}</Badge>
+        <Badge bg="light" text="dark" className="ms-2 fs-6">
+          {countTasks(statusFilters.completed)}
+        </Badge>
       </Button>
     </div>
   );

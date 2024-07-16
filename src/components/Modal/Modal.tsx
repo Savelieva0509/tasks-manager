@@ -12,11 +12,7 @@ function AddTaskModal() {
 
   return (
     <>
-      <Button
-        variant="primary"
-        onClick={handleShow}
-        style={{ marginBottom: '24px' }}
-      >
+      <Button variant="primary" onClick={handleShow}>
         + ADD NEW TASK
       </Button>
       <Modal

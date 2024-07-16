@@ -1,6 +1,6 @@
 import { Button, Card, Form } from 'react-bootstrap';
 import { BsFileEarmarkArrowDown } from 'react-icons/bs';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { deleteTask, toggleCompleted, editTask } from '../../redux/tasks-slice';
@@ -14,62 +14,68 @@ type TaskProps = {
 const Task = ({ task }: TaskProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
-  const [originalTitle, setOriginalTitle] = useState(task.title);
   const [editedText, setEditedText] = useState(task.text);
-  const [originalText, setOriginalText] = useState(task.text);
   const [editedFile, setEditedFile] = useState(task.file);
-  const [originalFile, setOriginalFile] = useState(task.file);
+  const [validated, setValidated] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const dispatch = useDispatch();
+
   const handleDelete = () => dispatch(deleteTask(task.id));
   const handleToggle = () => dispatch(toggleCompleted(task.id));
 
   const handleEdit = () => {
-    if (isEditing) {
-      if (editedTitle.trim() !== '') {
-        dispatch(
-          editTask({
-            id: task.id,
-            title: editedTitle,
-            text: editedText,
-            file: editedFile.url,
-          })
-        );
-        setIsEditing(false);
-      }
-    } else {
-      setIsEditing(true);
-      setOriginalTitle(editedTitle);
-      setOriginalText(editedText);
-      setOriginalFile(editedFile);
+    setIsEditing(true);
+  };
+
+  const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = formRef.current;
+
+    if (form && form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+      return;
     }
+
+    dispatch(
+      editTask({
+        id: task.id,
+        title: editedTitle,
+        text: editedText,
+        file: editedFile.url,
+      })
+    );
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditedTitle(originalTitle);
-    setEditedText(originalText);
-    setEditedFile(originalFile);
+    setEditedTitle(task.title);
+    setEditedText(task.text);
+    setEditedFile(task.file);
     setIsEditing(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name === 'title') {
-      setEditedTitle(event.target.value);
-    } else if (event.target.name === 'text') {
-      setEditedText(event.target.value);
-    } else if (event.target.name === 'file') {
-      const file = event.target.files?.[0];
-      if (file) {
-        setEditedFile({
-          name: file.name,
-          url: URL.createObjectURL(file),
-        });
-      }
+    const { name, value, files } = event.target;
+    if (name === 'title') {
+      setEditedTitle(value);
+    } else if (name === 'text') {
+      setEditedText(value);
+    } else if (name === 'file' && files && files[0]) {
+      setEditedFile({
+        name: files[0].name,
+        url: URL.createObjectURL(files[0]),
+      });
     }
   };
 
   return (
-    <Card className={classNames("bg-body-tertiary", css.taskCard, { [css.editing]: isEditing })}>
+    <Card
+      className={classNames('bg-body-tertiary', css.taskCard, {
+        [css.editing]: isEditing,
+      })}
+    >
       <Card.Body>
         <Form.Check
           type="checkbox"
@@ -79,7 +85,13 @@ const Task = ({ task }: TaskProps) => {
           onChange={handleToggle}
         />
         {isEditing ? (
-          <Form>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleSave}
+            ref={formRef}
+            className="mb-4"
+          >
             <Form.Group controlId="formTaskTitle" className="mb-3">
               <Form.Control
                 type="text"
@@ -87,7 +99,17 @@ const Task = ({ task }: TaskProps) => {
                 value={editedTitle}
                 onChange={handleChange}
                 placeholder="Enter task title"
+                required
+                minLength={5}
+                maxLength={50}
+                isInvalid={
+                  validated &&
+                  (editedTitle.length < 5 || editedTitle.length > 50)
+                }
               />
+              <Form.Control.Feedback type="invalid">
+                Task title must be between 5 and 50 characters.
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formTaskText" className="mb-3">
               <Form.Control
@@ -97,10 +119,19 @@ const Task = ({ task }: TaskProps) => {
                 value={editedText}
                 onChange={handleChange}
                 placeholder="Enter task text"
-                className={css.textarea}
+                required
+                minLength={10}
+                maxLength={200}
+                isInvalid={
+                  validated &&
+                  (editedText.length < 10 || editedText.length > 200)
+                }
               />
+              <Form.Control.Feedback type="invalid">
+                Task description must be between 10 and 200 characters.
+              </Form.Control.Feedback>
             </Form.Group>
-            {originalFile && (
+            {editedFile && (
               <div>
                 <a
                   className={classNames(
@@ -110,12 +141,12 @@ const Task = ({ task }: TaskProps) => {
                     'fs-5',
                     css.linkFile
                   )}
-                  href={originalFile.url}
+                  href={editedFile.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <BsFileEarmarkArrowDown size={30} className="me-1" />
-                  <span>{originalFile.name}</span>
+                  <span>{editedFile.name}</span>
                 </a>
                 <Form.Group controlId="formTaskFile" className="mt-2 mb-3">
                   <Form.Label>Replace file</Form.Label>
@@ -127,6 +158,14 @@ const Task = ({ task }: TaskProps) => {
                 </Form.Group>
               </div>
             )}
+            <div className={css.buttonWrapper}>
+              <Button variant="success" type="submit">
+                Save
+              </Button>
+              <Button variant="danger" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
           </Form>
         ) : (
           <>
@@ -146,29 +185,18 @@ const Task = ({ task }: TaskProps) => {
                 rel="noopener noreferrer"
               >
                 <BsFileEarmarkArrowDown size={30} className="me-1" />
-                <span>{editedFile.name}</span>
+                <span>{task.file.name}</span>
               </a>
             )}
+            <div className={css.buttonWrapper}>
+              <Button variant="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+              <Button variant="warning" onClick={handleEdit}>
+                Edit
+              </Button>
+            </div>
           </>
-        )}
-        {isEditing ? (
-          <div className={css.buttonWrapper}>
-            <Button variant="success" onClick={handleEdit}>
-              Save
-            </Button>
-            <Button variant="danger" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </div>
-        ) : (
-          <div className={css.buttonWrapper}>
-            <Button variant="danger" onClick={handleDelete}>
-              Delete
-            </Button>
-            <Button variant="warning" onClick={handleEdit}>
-              Edit
-            </Button>
-          </div>
         )}
       </Card.Body>
     </Card>

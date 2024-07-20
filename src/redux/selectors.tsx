@@ -12,16 +12,33 @@ export const getActiveTasks = (state: RootState) =>
 export const getCompletedTasks = (state: RootState) =>
   state.tasks.tasks.filter(task => task.completed);
 
+export const getSearchQuery = (state: RootState) => state.search.query;
+
 export const getFilteredTasks = (state: RootState) => {
   const { tasks, filter } = state;
+  const searchQuery = getSearchQuery(state).toLowerCase();
+
+  let filteredTasks = tasks.tasks;
+
   switch (filter.status) {
-    case 'all':
-      return tasks.tasks;
     case 'active':
-      return tasks.tasks.filter(task => !task.completed);
+      filteredTasks = filteredTasks.filter(task => !task.completed);
+      break;
     case 'completed':
-      return tasks.tasks.filter(task => task.completed);
+      filteredTasks = filteredTasks.filter(task => task.completed);
+      break;
     default:
-      return tasks.tasks;
+      break;
   }
+
+  const searchedTasks = searchQuery
+    ? filteredTasks.filter(task =>
+        task.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : filteredTasks;
+
+  return {
+    totalTasks: tasks.tasks.length,
+    filteredTasks: searchedTasks,
+  };
 };

@@ -5,16 +5,29 @@ import { TaskTypes } from '../../types';
 import css from './TaskList.module.scss';
 
 const TaskList = () => {
-  const tasks = useSelector(getFilteredTasks) as TaskTypes[];
+  const { totalTasks, filteredTasks } = useSelector(getFilteredTasks) as {
+    totalTasks: number;
+    filteredTasks: TaskTypes[];
+  };
+
+  if (totalTasks === 0) {
+    return <p className={css.noResults}>No tasks available.</p>;
+  }
 
   return (
-    <ul className={css.list}>
-      {tasks.map(task => (
-        <li className={css.listItem} key={task.id}>
-          <Task task={task} />
-        </li>
-      ))}
-    </ul>
+    <>
+      {filteredTasks.length > 0 ? (
+        <ul className={css.list}>
+          {filteredTasks.map(task => (
+            <li className={css.listItem} key={task.id}>
+              <Task task={task} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={css.noResults}>No tasks found matching your search.</p>
+      )}
+    </>
   );
 };
 

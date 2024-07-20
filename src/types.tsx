@@ -29,6 +29,7 @@ export interface FilterState {
 export interface RootState {
   tasks: TasksState;
   filter: FilterState;
+  search: SearchFormValues;
 }
 
 // Определение типа значений формы задачи
@@ -39,4 +40,9 @@ export interface TaskFormValues {
     name: string;
     url: string;
   };
+}
+
+// Определение типа значений формы поиска
+export interface SearchFormValues {
+  query: string;
 }

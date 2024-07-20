@@ -19,7 +19,7 @@ const SearchForm = () => {
         </InputGroup.Text>
         <Form.Control
           type="text"
-          placeholder="Enter any words from the title"
+          placeholder="Start enter the title"
           onChange={handleChange}
         />
       </InputGroup>

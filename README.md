@@ -17,6 +17,7 @@ tasks to them, and move tasks between different statuses.
 - **Delete Tasks:** The user can transfer the task to the archive and return to
   it later to make a final decision on it.
 - **Filter and Counter:** For ease of use there is a filter and task counter.
+- **Search:** The user can find a task by starting to enter any words from its title.
 
 ## Technologies Used
 
